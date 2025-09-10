@@ -9,20 +9,23 @@ raw_creds = os.getenv("GOOGLE_CREDENTIALS", "{}")
 try:
     GOOGLE_CREDENTIALS = json.loads(raw_creds)
 
-    # Fix private_key formatting (convert \\n → \n safely)
     if "private_key" in GOOGLE_CREDENTIALS:
         key = GOOGLE_CREDENTIALS["private_key"]
 
-        # Replace escaped newlines with real newlines
+        # Convert escaped newlines into real ones
         key = key.replace("\\n", "\n").strip()
 
-        # Ensure it has proper BEGIN/END lines
+        # Normalize BEGIN/END lines
         if not key.startswith("-----BEGIN PRIVATE KEY-----"):
             key = "-----BEGIN PRIVATE KEY-----\n" + key
         if not key.endswith("-----END PRIVATE KEY-----"):
             key = key + "\n-----END PRIVATE KEY-----"
 
+        # Ensure no spaces at line ends
+        key = "\n".join(line.strip() for line in key.splitlines())
+
         GOOGLE_CREDENTIALS["private_key"] = key
+
 except Exception as e:
-    print("Error loading GOOGLE_CREDENTIALS:", e)
+    print("❌ Error loading GOOGLE_CREDENTIALS:", e)
     GOOGLE_CREDENTIALS = {}
