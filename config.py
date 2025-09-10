@@ -17,6 +17,9 @@ try:
         # Replace escaped \\n with actual newlines
         GOOGLE_CREDENTIALS["private_key"] = key.replace("\\n", "\n").strip()
 
+        # Debugging: Log the first few characters of the private key (optional)
+        print("Private key loaded successfully:", GOOGLE_CREDENTIALS["private_key"][:30], "...")
+
 except Exception as e:
     print("❌ Error loading GOOGLE_CREDENTIALS:", e)
     GOOGLE_CREDENTIALS = {}
