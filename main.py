@@ -8,6 +8,9 @@ import gspread
 from google.oauth2.service_account import Credentials
 from babel.dates import format_datetime
 import pytz
+from config import (
+    GOOGLE_CREDENTIALS
+)
 
 
 # ========= CONFIG =========
@@ -30,8 +33,8 @@ HOLIDAYS = ["2025-08-29"]
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets",
           "https://www.googleapis.com/auth/drive"]
 
-creds = Credentials.from_service_account_file(
-    "credentials.json", scopes=SCOPES
+creds = Credentials.from_service_account_info(
+    GOOGLE_CREDENTIALS, scopes=SCOPES
 )
 client = gspread.authorize(creds)
 ss = client.open_by_key(SPREADSHEET_ID)
